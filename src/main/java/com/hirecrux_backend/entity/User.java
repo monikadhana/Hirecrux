@@ -5,6 +5,7 @@ import com.hirecrux_backend.enums.UserRole;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -38,5 +39,8 @@ public class User {
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "hr")
+    private List<Job> jobs;
 
 }
