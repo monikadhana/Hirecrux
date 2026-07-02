@@ -1,6 +1,8 @@
 package com.hirecrux_backend.entity;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import com.hirecrux_backend.enums.JobStatus;
 import lombok.Data;
@@ -31,14 +33,14 @@ public class Job {
     private String salaryRange;
 
     @Column(name = "location",nullable = false, length = 100)
-    private String Location;
+    private String location;
 
     @Column(name = "deadline", nullable = false)
-    private LocalDateTime deadline;
+    private LocalDate deadline;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private JobStatus Status;
+    private JobStatus status;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
