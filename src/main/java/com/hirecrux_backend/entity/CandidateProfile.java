@@ -8,13 +8,5 @@ import lombok.Data;
 @Entity
 @Data
 public class CandidateProfile {
-    @OneToOne
-    @JoinColumn(name = "candidate_id")
-    private User user;
-
-    private String resume_url;
-
-    private Integer total_experience;
     
-
 }
