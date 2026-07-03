@@ -29,6 +29,7 @@ public class User {
     private String phone;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private UserRole role;
 
     @Column(name = "is_verified")

@@ -32,7 +32,7 @@ public class Job {
     @Column(name = "salary_range", length = 50)
     private String salaryRange;
 
-    @Column(name = "location",nullable = false, length = 100)
+    @Column(name = "location", length = 100)
     private String location;
 
     @Column(name = "deadline", nullable = false)

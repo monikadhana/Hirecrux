@@ -1,7 +1,9 @@
 package com.hirecrux_backend.service;
 
-import org.springframework.stereotype.Service;
+import com.hirecrux_backend.dto.request.RegisterRequestDto;
+import com.hirecrux_backend.dto.response.UserResponseDto;
 
 public interface UserService {
+    UserResponseDto register(RegisterRequestDto request);
 
 }

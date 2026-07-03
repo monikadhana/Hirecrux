@@ -10,6 +10,7 @@ import lombok.Data;
 @Table(name="candidate_profile")
 public class CandidateProfile {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "candidate_id")
     private Integer candidateId;
 
