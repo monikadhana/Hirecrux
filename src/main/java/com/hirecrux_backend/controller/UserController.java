@@ -1,6 +1,8 @@
 package com.hirecrux_backend.controller;
 
+import com.hirecrux_backend.dto.request.LoginRequestDto;
 import com.hirecrux_backend.dto.request.RegisterRequestDto;
+import com.hirecrux_backend.dto.response.LoginResponseDto;
 import com.hirecrux_backend.dto.response.UserResponseDto;
 import com.hirecrux_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,11 @@ public class UserController {
     @PostMapping("/register")
     public UserResponseDto register(@RequestBody RegisterRequestDto request){
         return userService.register(request);
+    }
+
+    @PostMapping("/login")
+    public LoginResponseDto login(@RequestBody LoginRequestDto request){
+        return userService.login(request);
     }
 
 }

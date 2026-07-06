@@ -1,6 +1,8 @@
 package com.hirecrux_backend.service.impl;
 
+import com.hirecrux_backend.dto.request.LoginRequestDto;
 import com.hirecrux_backend.dto.request.RegisterRequestDto;
+import com.hirecrux_backend.dto.response.LoginResponseDto;
 import com.hirecrux_backend.dto.response.UserResponseDto;
 import com.hirecrux_backend.entity.User;
 import com.hirecrux_backend.enums.UserRole;
@@ -8,6 +10,8 @@ import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +52,27 @@ public class UserServiceImpl implements UserService {
         response.setIsVerified(savedUser.getIsVerified());
         response.setRole(savedUser.getRole());
 
+        return response;
+    }
+
+    @Override
+    public LoginResponseDto login(LoginRequestDto request){
+        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+        if(userOptional.isEmpty()){
+            throw new RuntimeException("Invalid Email or password");
+        }
+        User user = userOptional.get();
+
+        if (!user.getPassword().equals(request.getPassword())){
+            throw new RuntimeException("Invalid Email or Password");
+        }
+        LoginResponseDto response = new LoginResponseDto();
+
+        response.setUserId(user.getUserId());
+        response.setFullName(user.getFullName());
+        response.setRole(user.getRole());
+        response.setEmail(user.getEmail());
+        response.setIsVerified(user.getIsVerified());
         return response;
     }
 }
