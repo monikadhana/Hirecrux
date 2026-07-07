@@ -9,6 +9,7 @@ import com.hirecrux_backend.enums.UserRole;
 import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public UserResponseDto register(RegisterRequestDto request) {
         //checks email exist
@@ -29,7 +31,8 @@ public class UserServiceImpl implements UserService {
         //copying to entity
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhone(request.getPhone());
 
         //set the isVerified as false and role as a candidate
@@ -63,7 +66,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = userOptional.get();
 
-        if (!user.getPassword().equals(request.getPassword())){
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
             throw new RuntimeException("Invalid Email or Password");
         }
         LoginResponseDto response = new LoginResponseDto();
