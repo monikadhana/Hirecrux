@@ -10,4 +10,5 @@ public class LoginResponseDto {
     private String fullName;
     private UserRole role;
     private Boolean isVerified;
+    private String token;
 }

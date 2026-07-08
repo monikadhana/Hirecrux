@@ -7,6 +7,7 @@ import com.hirecrux_backend.dto.response.UserResponseDto;
 import com.hirecrux_backend.entity.User;
 import com.hirecrux_backend.enums.UserRole;
 import com.hirecrux_backend.repository.UserRepository;
+import com.hirecrux_backend.security.JwtService;
 import com.hirecrux_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     @Override
     public UserResponseDto register(RegisterRequestDto request) {
         //checks email exist
@@ -69,6 +71,8 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
             throw new RuntimeException("Invalid Email or Password");
         }
+
+        String token = jwtService.generateToken(user.getEmail()); //JWT implementation
         LoginResponseDto response = new LoginResponseDto();
 
         response.setUserId(user.getUserId());
@@ -76,6 +80,7 @@ public class UserServiceImpl implements UserService {
         response.setRole(user.getRole());
         response.setEmail(user.getEmail());
         response.setIsVerified(user.getIsVerified());
+        response.setToken(token);
         return response;
     }
 }
