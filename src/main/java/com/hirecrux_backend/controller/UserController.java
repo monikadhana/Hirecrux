@@ -6,10 +6,7 @@ import com.hirecrux_backend.dto.response.LoginResponseDto;
 import com.hirecrux_backend.dto.response.UserResponseDto;
 import com.hirecrux_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,4 +24,8 @@ public class UserController {
         return userService.login(request);
     }
 
+    @GetMapping("/profile")
+    public String profile() {
+        return "JWT Authentication Successful";
+    }
 }
