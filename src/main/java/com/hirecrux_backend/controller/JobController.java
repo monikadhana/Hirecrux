@@ -4,10 +4,9 @@ import com.hirecrux_backend.dto.request.CreateJobRequest;
 import com.hirecrux_backend.dto.response.CreateJobResponse;
 import com.hirecrux_backend.service.JobService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,5 +17,12 @@ public class JobController {
     @PostMapping("/create")
     public CreateJobResponse createJob(@RequestBody CreateJobRequest request){
         return jobService.createJob(request);
+    }
+
+    //get all jobs..no resquestbody because we donot give any input for getting all jobs
+    @GetMapping("/all")
+    public List<CreateJobResponse> getAllJobs(){
+        return jobService.getAllJobs();
+
     }
 }

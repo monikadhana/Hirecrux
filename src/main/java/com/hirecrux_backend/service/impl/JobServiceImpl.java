@@ -64,8 +64,9 @@ public class JobServiceImpl implements JobService {
         return createJobResponse;
     }
 
+
     @Override
-    List<CreateJobResponse> getAllJobs(){
+    public List<CreateJobResponse> getAllJobs(){
         List<Job> jobs = jobRepository.findAll();
         if(jobs.isEmpty()){
             throw new RuntimeException("Jobs does not exist");
@@ -82,8 +83,10 @@ public class JobServiceImpl implements JobService {
             response.setStatus(job.getStatus());
             response.setLocation(job.getLocation());
             response.setDeadline(job.getDeadline());
+
+            responses.add(response);
         }
 
-        return response;
+        return responses;
     }
 }
