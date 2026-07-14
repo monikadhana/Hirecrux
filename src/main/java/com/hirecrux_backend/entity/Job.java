@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import com.hirecrux_backend.enums.JobStatus;
 import lombok.Data;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @Entity
 @Data
@@ -40,6 +42,7 @@ public class Job {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     private JobStatus status;
 
     @Column(name = "created_at", insertable = false, updatable = false)

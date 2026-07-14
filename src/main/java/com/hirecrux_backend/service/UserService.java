@@ -8,5 +8,4 @@ import com.hirecrux_backend.dto.response.UserResponseDto;
 public interface UserService {
     UserResponseDto register(RegisterRequestDto request);
     LoginResponseDto login(LoginRequestDto request);
-
 }
