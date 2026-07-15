@@ -23,6 +23,15 @@ public class JobController {
     @GetMapping("/all")
     public List<CreateJobResponse> getAllJobs(){
         return jobService.getAllJobs();
+    }
 
+    @GetMapping("/{jobId}")
+    public CreateJobResponse getJobById(@PathVariable Integer jobId){
+        return jobService.getJobById(jobId);
+    }
+
+    @PutMapping("/update/{jobId}")
+    public CreateJobResponse updateJobById(@RequestBody CreateJobRequest request, @PathVariable Integer jobId){
+        return jobService.updateJobById(request, jobId);
     }
 }

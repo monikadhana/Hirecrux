@@ -9,4 +9,7 @@ import java.util.List;
 public interface JobService {
     CreateJobResponse createJob (CreateJobRequest request);
     List<CreateJobResponse> getAllJobs();
+    CreateJobResponse getJobById(Integer jobId);
+    CreateJobResponse updateJobById(CreateJobRequest request, Integer jobId);
+    CreateJobResponse closeJobById(Integer jobId);
 }

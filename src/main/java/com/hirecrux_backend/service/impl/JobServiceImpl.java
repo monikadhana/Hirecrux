@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.hirecrux_backend.enums.JobStatus.CLOSED;
+
 @Service
 @RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
@@ -29,6 +31,7 @@ public class JobServiceImpl implements JobService {
     public CreateJobResponse createJob(CreateJobRequest request){
         Job job = new Job();
 
+        //COPY TO ENTITY
         job.setTitle(request.getTitle());
         job.setDescription(request.getDescription());
         job.setExperienceRequired(request.getExperienceRequired());
@@ -36,10 +39,11 @@ public class JobServiceImpl implements JobService {
         job.setLocation(request.getLocation());
         job.setDeadline(request.getDeadline());
 
+        // verifyiing the login user and store in
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
-
+        //user may or may not be exist
         Optional<User> userOptional = userRepository.findByEmail(userDetails.getUsername());
         if(userOptional.isEmpty()){
             throw new RuntimeException("Authenticated user not found\"");
@@ -86,7 +90,100 @@ public class JobServiceImpl implements JobService {
 
             responses.add(response);
         }
-
         return responses;
+    }
+
+    public CreateJobResponse getJobById(Integer jobId){
+        Optional<Job> jobOptional = jobRepository.findById(jobId);
+        if(jobOptional.isEmpty()){
+            throw new RuntimeException("Job does not exist");
+        }
+        //1.get the particular job
+        Job jobs = jobOptional.get();
+        //create new response
+        CreateJobResponse response = new CreateJobResponse();
+        //copy in response
+        response.setJobId(jobs.getJobId());
+        response.setTitle(jobs.getTitle());
+        response.setDescription(jobs.getDescription());
+        response.setExperienceRequired(jobs.getExperienceRequired());
+        response.setSalaryRange(jobs.getSalaryRange());
+        response.setStatus(jobs.getStatus());
+        response.setLocation(jobs.getLocation());
+        response.setDeadline(jobs.getDeadline());
+
+        return response;
+    }
+
+    public CreateJobResponse updateJobById(CreateJobRequest request, Integer jobId){
+        Optional<Job> jobOptional = jobRepository.findById(jobId);
+
+        if(jobOptional.isEmpty()){
+            throw new RuntimeException("Job does not exist");
+        }
+
+        Job jobs = jobOptional.get();
+
+        if(request.getTitle() != null){
+            jobs.setTitle(request.getTitle());
+        }
+        if(request.getDescription() != null){
+            jobs.setDescription(request.getDescription());
+        }
+        if(request.getExperienceRequired() != null){
+            jobs.setExperienceRequired(request.getExperienceRequired());
+        }
+        if(request.getSalaryRange() != null){
+            jobs.setSalaryRange(request.getSalaryRange());
+        }
+        if(request.getStatus() != null){
+            jobs.setStatus(request.getStatus());
+        }
+        if(request.getLocation() != null){
+            jobs.setLocation(request.getLocation());
+        }
+        if(request.getDeadline() != null){
+            jobs.setDeadline(request.getDeadline());
+        }
+
+         Job savedJobs = jobRepository.save(jobs);
+
+         CreateJobResponse response = new CreateJobResponse();
+
+         response.setJobId(savedJobs.getJobId());
+         response.setTitle(savedJobs.getTitle());
+         response.setDescription(savedJobs.getDescription());
+         response.setExperienceRequired(savedJobs.getExperienceRequired());
+         response.setSalaryRange(savedJobs.getSalaryRange());
+         response.setStatus(savedJobs.getStatus());
+         response.setLocation(savedJobs.getLocation());
+         response.setDeadline(savedJobs.getDeadline());
+         return  response;
+    }
+
+    public CreateJobResponse closeJobById(Integer jobId){
+        Optional<Job> jobOptional = jobRepository.findById(jobId);
+
+        if(jobOptional.isEmpty()){
+            throw new RuntimeException("Job does not exist");
+        }
+
+        Job jobs = jobOptional.get();
+        if(jobs.getStatus() == JobStatus.CLOSED){
+            throw new RuntimeException("jobs is already closed");
+        }
+        jobs.setStatus(JobStatus.CLOSED);
+
+        Job savedStatus = jobRepository.save(jobs);
+
+        CreateJobResponse response = new CreateJobResponse();
+        response.setJobId(savedStatus.getJobId());
+        response.setTitle(savedStatus.getTitle());
+        response.setDescription(savedStatus.getDescription());
+        response.setExperienceRequired(savedStatus.getExperienceRequired());
+        response.setSalaryRange(savedStatus.getSalaryRange());
+        response.setStatus(savedStatus.getStatus());
+        response.setStatus(savedStatus.getStatus());
+        return response;
     }
 }
