@@ -34,4 +34,16 @@ public class JobController {
     public CreateJobResponse updateJobById(@RequestBody CreateJobRequest request, @PathVariable Integer jobId){
         return jobService.updateJobById(request, jobId);
     }
+
+    @PutMapping("/close/{jobId}")
+    public CreateJobResponse closeJobById(@PathVariable Integer jobId){
+        return jobService.closeJobById(jobId);
+    }
+
+    @GetMapping("/searchJob")
+    public List<CreateJobResponse> searchJobs(@RequestParam(required = false) String title,
+                                              @RequestParam(required = false) String location,
+                                              @RequestParam(required = false) String experienceRequired){
+        return jobService.searchJobs(title,location,experienceRequired);
+    }
 }

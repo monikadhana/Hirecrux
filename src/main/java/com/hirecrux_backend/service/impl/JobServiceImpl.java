@@ -8,7 +8,9 @@ import com.hirecrux_backend.enums.JobStatus;
 import com.hirecrux_backend.repository.JobRepository;
 import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.service.JobService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.hibernate.sql.ast.tree.expression.Over;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.hirecrux_backend.enums.JobStatus.CLOSED;
+import static com.hirecrux_backend.enums.JobStatus.OPEN;
 
 @Service
 @RequiredArgsConstructor
@@ -185,5 +188,60 @@ public class JobServiceImpl implements JobService {
         response.setStatus(savedStatus.getStatus());
         response.setStatus(savedStatus.getStatus());
         return response;
+    }
+
+    public List<CreateJobResponse> searchJobs(String title, String location, String experienceRequired ){
+        //I don't have any filters yet
+        Specification<Job> specification = Specification.allOf();
+
+        if(title != null && !title.isBlank()) {
+            //allof instead of where, rule - (root,query,criteriaBuilder)
+            //root - root.get("title") -- job.title, query - no need, crb - LIKE,WHERE, eg -- WHERE title LIKE '%Java%'
+            specification = specification.and(
+                    (root, query, criteriaBuilder) ->
+                            criteriaBuilder.like(root.get("title"), "%" + title.toLowerCase() + "%"));
+        }
+            //WHERE title LIKE '%Java%'
+            //AND location LIKE '%Chennai%' -- initially allOf() and? added other
+
+            if(location != null && !location.isBlank() ){
+                specification = specification.and(
+                        (root, query, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get("location"), "%"+ location.toLowerCase() +"%"));
+            }
+
+            if(experienceRequired != null && !experienceRequired.isBlank()){
+                specification = specification.and(
+                        (root, query, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get("experienceRequired"),"%"+ experienceRequired.toLowerCase() +"%"));
+            }
+
+            specification = specification.and(
+                    (root, query, criteriaBuilder) ->
+                            criteriaBuilder.equal(root.get("status"), JobStatus.OPEN));
+
+            List<Job> jobs = jobRepository.findAll(specification);
+
+            if(jobs.isEmpty()){
+                return new ArrayList<>();
+            }
+
+            List<CreateJobResponse> responses = new ArrayList<>();
+            for(Job searchJobs:jobs){
+                CreateJobResponse response = new CreateJobResponse();
+
+                response.setJobId(searchJobs.getJobId());
+                response.setTitle(searchJobs.getTitle());
+                response.setDescription(searchJobs.getDescription());
+                response.setLocation(searchJobs.getLocation());
+                response.setExperienceRequired(searchJobs.getExperienceRequired());
+                response.setSalaryRange(searchJobs.getSalaryRange());
+                response.setDeadline(searchJobs.getDeadline());
+                response.setStatus(searchJobs.getStatus());
+                responses.add(response);
+            }
+
+            return responses;
+
     }
 }

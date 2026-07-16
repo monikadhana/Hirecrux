@@ -12,4 +12,5 @@ public interface JobService {
     CreateJobResponse getJobById(Integer jobId);
     CreateJobResponse updateJobById(CreateJobRequest request, Integer jobId);
     CreateJobResponse closeJobById(Integer jobId);
+    List<CreateJobResponse> searchJobs (String title, String location, String experienceRequired);
 }
