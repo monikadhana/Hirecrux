@@ -10,12 +10,12 @@ import lombok.Data;
 @Table(name="candidate_profile")
 public class CandidateProfile {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "candidate_id")
     private Integer candidateId;
 
     @OneToOne
-    @JoinColumn(name = "candidate_id", insertable = false, updatable = false)
+    @MapsId
+    @JoinColumn(name = "candidate_id")
     private User user;
 
     @Column(name="resume_url", length= 500)
