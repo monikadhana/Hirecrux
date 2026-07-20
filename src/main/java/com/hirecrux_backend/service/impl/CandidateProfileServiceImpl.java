@@ -61,4 +61,112 @@ public class CandidateProfileServiceImpl implements CandidateProfileService {
 
         return response;
     }
+
+    @Override
+    public CandidateProfileResponse getMyProfile(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if(userOptional.isEmpty()){
+            throw new RuntimeException("User not found");
+        }
+        User user = userOptional.get();
+
+        Optional<CandidateProfile> candidateProfileOptional = candidateProfileRepository.findByUser(user);
+        if(candidateProfileOptional.isEmpty()){
+            throw new RuntimeException("Candidate Profile not found");
+        }
+
+        CandidateProfile candidateProfile = candidateProfileOptional.get();
+
+        CandidateProfileResponse response = new CandidateProfileResponse();
+
+        response.setCandidateId(candidateProfile.getCandidateId());
+        response.setFullName(user.getFullName());
+        response.setEmail(user.getEmail());
+        response.setEducation(candidateProfile.getEducation());
+        response.setTotalExperience(candidateProfile.getTotalExperience());
+        response.setLinkedinUrl(candidateProfile.getLinkedinUrl());
+        response.setGithubUrl(candidateProfile.getGithubUrl());
+        response.setResumeUrl(candidateProfile.getResumeUrl());
+
+        return response;
+    }
+
+    @Override
+    public CandidateProfileResponse updateMyProfile(CandidateProfileRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if(userOptional.isEmpty()){
+            throw new RuntimeException("User not found");
+        }
+        User user = userOptional.get();
+
+        Optional<CandidateProfile> candidateProfileOptional = candidateProfileRepository.findByUser(user);
+        if(candidateProfileOptional.isEmpty()){
+            throw new RuntimeException("Candidate not found");
+        }
+        CandidateProfile candidateProfile = candidateProfileOptional.get();
+        CandidateProfile updatedCandidateProfile = candidateProfile;
+
+        if(request.getEducation() != null){
+            updatedCandidateProfile.setEducation(request.getEducation());
+        }
+        if(request.getTotalExperience() != null){
+            updatedCandidateProfile.setTotalExperience(request.getTotalExperience());
+        }
+        if(request.getResumeUrl() != null){
+            updatedCandidateProfile.setResumeUrl(request.getResumeUrl());
+        }
+        if(request.getLinkedinUrl() != null){
+            updatedCandidateProfile.setLinkedinUrl(request.getLinkedinUrl());
+        }
+        if(request.getGithubUrl() != null){
+            updatedCandidateProfile.setGithubUrl(request.getGithubUrl());
+        }
+
+        CandidateProfile savedCandidate = candidateProfileRepository.save(updatedCandidateProfile);
+
+        CandidateProfileResponse response = new CandidateProfileResponse();
+
+        response.setCandidateId(savedCandidate.getCandidateId());
+        response.setFullName(user.getFullName());
+        response.setEmail(user.getEmail());
+        response.setEducation(savedCandidate.getEducation());
+        response.setTotalExperience(savedCandidate.getTotalExperience());
+        response.setResumeUrl(savedCandidate.getResumeUrl());
+        response.setGithubUrl(savedCandidate.getGithubUrl());
+        response.setLinkedinUrl(savedCandidate.getLinkedinUrl());
+
+        return response;
+    }
+
+    public CandidateProfileResponse getCandidateProfileById(Integer candidateId){
+        Optional<CandidateProfile> candidateOptional = candidateProfileRepository.findById(candidateId);
+
+        if(candidateOptional.isEmpty()){
+            throw new RuntimeException("Candidate not found");
+        }
+
+        CandidateProfile candidateProfile = candidateOptional.get();
+        User user = candidateProfile.getUser();
+
+        CandidateProfileResponse response = new CandidateProfileResponse();
+
+        response.setCandidateId(candidateProfile.getCandidateId());
+        response.setFullName(user.getFullName());
+        response.setEmail(user.getEmail());
+        response.setEducation(candidateProfile.getEducation());
+        response.setTotalExperience(candidateProfile.getTotalExperience());
+        response.setResumeUrl(candidateProfile.getResumeUrl());
+        response.setLinkedinUrl(candidateProfile.getLinkedinUrl());
+        response.setGithubUrl(candidateProfile.getGithubUrl());
+
+        return response;
+    }
 }

@@ -6,4 +6,6 @@ import com.hirecrux_backend.dto.response.CreateJobResponse;
 
 public interface CandidateProfileService {
     CandidateProfileResponse createCandidateProfile(CandidateProfileRequest request);
+    CandidateProfileResponse getMyProfile();
+    CandidateProfileResponse updateMyProfile(CandidateProfileRequest request);
 }
