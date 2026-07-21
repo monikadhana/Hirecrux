@@ -26,8 +26,8 @@ public class Application {
     @Column(name = "resume_score")
     private Integer resumeScore;
 
-    @Column(name = "application_status")
     @Enumerated(EnumType.STRING)
+    @Column(name = "application_status")
     private ApplicationStatus applicationStatus;
 
     @Column(name = "applied_at", insertable = false, updatable = false)

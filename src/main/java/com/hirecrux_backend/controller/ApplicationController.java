@@ -6,18 +6,19 @@ import com.hirecrux_backend.repository.ApplicationRepository;
 import com.hirecrux_backend.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
 @RestController
-
+@RequiredArgsConstructor
 @RequestMapping("/api/application")
 public class ApplicationController {
-    private ApplicationService applicationService;
 
-    @PostMapping("/create-application")
-    public ApplicationResponse createApplication(ApplicationRequest request){
+    private final ApplicationService applicationService;
+
+    @PostMapping("/createApplication")
+    public ApplicationResponse createApplication(@RequestBody ApplicationRequest request) {
         return applicationService.createApplication(request);
     }
 }
