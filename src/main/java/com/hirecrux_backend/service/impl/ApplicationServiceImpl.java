@@ -1,6 +1,7 @@
 package com.hirecrux_backend.service.impl;
 
 import com.hirecrux_backend.dto.request.ApplicationRequest;
+import com.hirecrux_backend.dto.request.UpdateApplicationRequest;
 import com.hirecrux_backend.dto.response.ApplicationResponse;
 import com.hirecrux_backend.entity.Application;
 import com.hirecrux_backend.entity.CandidateProfile;
@@ -19,6 +20,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -79,6 +83,73 @@ public class ApplicationServiceImpl implements ApplicationService {
         response.setResumeScore(savedApplication.getResumeScore());
 
         return response;
+    }
 
+    @Override
+    public ApplicationResponse getApplicationById(Integer applicationId){
+        Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
+
+        if(applicationOptional.isEmpty()){
+            throw new RuntimeException("Application does not exist");
+        }
+        Application application = applicationOptional.get();
+        ApplicationResponse response = new ApplicationResponse();
+
+        response.setApplicationId(application.getApplicationId());
+        response.setJobId(application.getJob().getJobId());
+        response.setJobTitle(application.getJob().getTitle());
+        response.setApplicationStatus(application.getApplicationStatus());
+        response.setResumeScore(application.getResumeScore());
+        response.setAppliedAt(application.getAppliedAt());
+
+        return response;
+    }
+
+    @Override
+    public ApplicationResponse updateApplicationStatus(Integer applicationId, UpdateApplicationRequest request){
+        Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
+        if(applicationOptional.isEmpty()){
+            throw new RuntimeException("Application not found");
+        }
+        Application application = applicationOptional.get();
+
+        if(request.getApplicationStatus() != null){
+            application.setApplicationStatus(request.getApplicationStatus());
+        }
+
+        Application updatedApplication = applicationRepository.save(application);
+        ApplicationResponse response = new ApplicationResponse();
+
+        response.setApplicationId(updatedApplication.getApplicationId());
+        response.setJobId(updatedApplication.getJob().getJobId());
+        response.setJobTitle(updatedApplication.getJob().getTitle());
+        response.setApplicationStatus(updatedApplication.getApplicationStatus());
+        response.setAppliedAt(updatedApplication.getAppliedAt());
+        response.setResumeScore(updatedApplication.getResumeScore());
+
+        return response;
+    }
+
+    @Override
+    public List<ApplicationResponse> getApplicationsByJob(Integer jobId){
+        Optional<Job> jobOptional = jobRepository.findById(jobId);
+        if(jobOptional.isEmpty()){
+            throw new RuntimeException("Jobs not found");
+        }
+        Job job = jobOptional.get();
+        List<Application> applications = applicationRepository.findByJob(job);
+        List<ApplicationResponse> responses = new ArrayList<>();
+
+        for(Application application: applications){
+            ApplicationResponse response = new ApplicationResponse();
+            response.setApplicationId(application.getApplicationId());
+            response.setJobId(application.getJob().getJobId());
+            response.setJobTitle(application.getJob().getTitle());
+            response.setApplicationStatus(application.getApplicationStatus());
+            response.setResumeScore(application.getResumeScore());
+            response.setAppliedAt(application.getAppliedAt());
+            responses.add(response);
+        }
+        return responses;
     }
 }
