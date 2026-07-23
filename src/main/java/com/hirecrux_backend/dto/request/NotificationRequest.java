@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class NotificationRequest {
-    private User user;
+    private Integer userId;
     private String title;
     private String message;
 }

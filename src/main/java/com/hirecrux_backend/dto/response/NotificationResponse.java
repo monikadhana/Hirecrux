@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class NotificationResponse {
     private Integer notificationId;
-    private User user;
+    private Integer userId;
     private String title;
     private String message;
     private Boolean isRead;
