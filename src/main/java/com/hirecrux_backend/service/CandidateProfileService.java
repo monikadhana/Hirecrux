@@ -8,4 +8,5 @@ public interface CandidateProfileService {
     CandidateProfileResponse createCandidateProfile(CandidateProfileRequest request);
     CandidateProfileResponse getMyProfile();
     CandidateProfileResponse updateMyProfile(CandidateProfileRequest request);
+    CandidateProfileResponse getCandidateProfileById(Integer candidateId);
 }

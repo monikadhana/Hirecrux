@@ -26,21 +26,23 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationResponse createNotification(NotificationRequest request){
+        //get user by userid
         Optional<User> userOptional = userRepository.findById(request.getUserId());
         if(userOptional.isEmpty()){
             throw new RuntimeException("User not found");
         }
         User user = userOptional.get();
 
+        //create entity and copy to entity
         Notification notification = new Notification();
         notification.setUser(user);
         notification.setTitle(request.getTitle());
         notification.setMessage(request.getMessage());
-
+        //set as false that is unread
         notification.setIsRead(Boolean.FALSE);
 
         Notification savedNotification = notificationRepository.save(notification);
-
+        //copy to response
         NotificationResponse notificationResponse = new NotificationResponse();
 
         notificationResponse.setNotificationId(savedNotification.getNotificationId());
@@ -49,25 +51,29 @@ public class NotificationServiceImpl implements NotificationService {
         notificationResponse.setMessage(savedNotification.getMessage());
         notificationResponse.setIsRead(savedNotification.getIsRead());
         notificationResponse.setCreatedAt(savedNotification.getCreatedAt());
-
         return notificationResponse;
     }
 
     @Override
     public List<NotificationResponse> getMyNotifications(){
+        //Use JWT to get the user -- get userName from userDetails
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
-
+        //always get the user using email--findbyemail
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()){
             throw new RuntimeException("User not found");
         }
         User user = userOptional.get();
+        //find user notification
         List<Notification> notifications = notificationRepository.findByUser(user);
 
+        //create new array
         List<NotificationResponse> responses = new ArrayList<>();
+        //loop for(RT variable:collections)
         for(Notification notification:notifications){
+            //copy to response
             NotificationResponse notificationResponse = new NotificationResponse();
 
             notificationResponse.setNotificationId(notification.getNotificationId());
@@ -82,14 +88,17 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public NotificationResponse markAsRead(Integer notificationId){
+        //get notification by notificationId
         Optional<Notification> notificationOptional = notificationRepository.findById(notificationId);
         if(notificationOptional.isEmpty()){
             throw new RuntimeException("No notifications");
         }
         Notification notification = notificationOptional.get();
+        //set the isread true
         notification.setIsRead(Boolean.TRUE);
-        Notification savedNotification = notificationRepository.save(notification);
+        Notification savedNotification = notificationRepository.save(notification); //save in repo
 
+        //copy to response
         NotificationResponse notificationResponse = new NotificationResponse();
         notificationResponse.setIsRead(savedNotification.getIsRead());
         notificationResponse.setNotificationId(savedNotification.getNotificationId());

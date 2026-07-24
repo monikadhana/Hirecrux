@@ -26,4 +26,9 @@ public class CandidateProfileController {
     public CandidateProfileResponse updateMyProfile(@RequestBody CandidateProfileRequest request){
         return candidateProfileService.updateMyProfile(request);
     }
+
+    @GetMapping("/getCandidateProfile")
+    public CandidateProfileResponse getCandidateProfileById(@PathVariable Integer candidateId){
+        return candidateProfileService.getCandidateProfileById(candidateId);
+    }
 }
