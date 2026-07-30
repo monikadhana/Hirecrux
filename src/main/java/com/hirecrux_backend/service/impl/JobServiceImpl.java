@@ -49,7 +49,7 @@ public class JobServiceImpl implements JobService {
         //user may or may not be exist
         Optional<User> userOptional = userRepository.findByEmail(userDetails.getUsername());
         if(userOptional.isEmpty()){
-            throw new RuntimeException("Authenticated user not found\"");
+            throw new RuntimeException("Authenticated user not found");
         }
         User user = userOptional.get();
         job.setHr(user);
