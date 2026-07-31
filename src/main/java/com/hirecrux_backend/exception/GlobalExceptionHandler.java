@@ -38,6 +38,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException exception, HttpServletRequest request){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(LocalDateTime.now());
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setMessage(exception.getMessage());
+        errorResponse.setError(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request){
         ValidationErrorResponse validationErrorResponse = new ValidationErrorResponse();

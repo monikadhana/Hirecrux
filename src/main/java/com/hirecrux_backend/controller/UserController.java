@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDto login(@RequestBody LoginRequestDto request){
+    public LoginResponseDto login(@Valid @RequestBody LoginRequestDto request){
         return userService.login(request);
     }
 

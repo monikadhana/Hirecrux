@@ -5,6 +5,7 @@ import com.hirecrux_backend.dto.request.UpdateApplicationRequest;
 import com.hirecrux_backend.dto.response.ApplicationResponse;
 import com.hirecrux_backend.repository.ApplicationRepository;
 import com.hirecrux_backend.service.ApplicationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping("/createApplication")
-    public ApplicationResponse createApplication(@RequestBody ApplicationRequest request) {
+    public ApplicationResponse createApplication(@Valid @RequestBody ApplicationRequest request) {
         return applicationService.createApplication(request);
     }
 

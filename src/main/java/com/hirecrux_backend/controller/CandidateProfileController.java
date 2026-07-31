@@ -3,6 +3,7 @@ package com.hirecrux_backend.controller;
 import com.hirecrux_backend.dto.request.CandidateProfileRequest;
 import com.hirecrux_backend.dto.response.CandidateProfileResponse;
 import com.hirecrux_backend.service.CandidateProfileService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ public class CandidateProfileController {
     private final CandidateProfileService candidateProfileService;
 
     @PostMapping("/create")
-    public CandidateProfileResponse createCandidateProfile(@RequestBody CandidateProfileRequest request){
+    public CandidateProfileResponse createCandidateProfile(@Valid @RequestBody CandidateProfileRequest request){
         return candidateProfileService.createCandidateProfile(request);
     }
 
@@ -23,7 +24,7 @@ public class CandidateProfileController {
     }
 
     @PutMapping("/updateProfile")
-    public CandidateProfileResponse updateMyProfile(@RequestBody CandidateProfileRequest request){
+    public CandidateProfileResponse updateMyProfile(@Valid @RequestBody CandidateProfileRequest request){
         return candidateProfileService.updateMyProfile(request);
     }
 

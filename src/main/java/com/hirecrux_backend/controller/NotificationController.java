@@ -4,6 +4,7 @@ import com.hirecrux_backend.dto.request.NotificationRequest;
 import com.hirecrux_backend.dto.response.NotificationResponse;
 import com.hirecrux_backend.entity.Notification;
 import com.hirecrux_backend.service.NotificationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/create-notification")
-    public NotificationResponse createNotification(@RequestBody NotificationRequest request){
+    public NotificationResponse createNotification(@Valid @RequestBody NotificationRequest request){
         return notificationService.createNotification(request);
     }
 

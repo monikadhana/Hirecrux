@@ -9,6 +9,8 @@ import com.hirecrux_backend.entity.Job;
 import com.hirecrux_backend.entity.User;
 import com.hirecrux_backend.enums.ApplicationStatus;
 import com.hirecrux_backend.enums.JobStatus;
+import com.hirecrux_backend.exception.DuplicateResourceException;
+import com.hirecrux_backend.exception.ResourceNotFoundException;
 import com.hirecrux_backend.repository.ApplicationRepository;
 import com.hirecrux_backend.repository.CandidateProfileRepository;
 import com.hirecrux_backend.repository.JobRepository;
@@ -19,8 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,29 +42,29 @@ public class ApplicationServiceImpl implements ApplicationService {
         //always get the user using email--findbyemail
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()){
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
         User user = userOptional.get();
         //get job from jobid
         Optional<Job> jobOptional= jobRepository.findById(request.getJobId());
         if(jobOptional.isEmpty()){
-            throw new RuntimeException("Job not exist");
+            throw new ResourceNotFoundException("Job not exist");
         }
         Job job = jobOptional.get();
 
         //we can create application only the job is open
         if(job.getStatus() != JobStatus.OPEN){
-            throw new RuntimeException("This job is not open for applications.");
+            throw new ResourceNotFoundException("This job is not open for applications.");
         }
 
         //get candidateprofile by user
         Optional<CandidateProfile> candidateProfileOptional = candidateProfileRepository.findByUser(user);
         if(candidateProfileOptional.isEmpty()){
-            throw new RuntimeException("Candidate not found");
+            throw new ResourceNotFoundException("Candidate not found");
         }
         //we check app repo has already a user with job
         if(applicationRepository.existsByCandidateAndJob(user, job)){
-            throw new RuntimeException("Candidate already applied");
+            throw new DuplicateResourceException("Candidate already applied");
         }
         //copy to entity
         Application application = new Application();
@@ -92,7 +92,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
 
         if(applicationOptional.isEmpty()){
-            throw new RuntimeException("Application does not exist");
+            throw new ResourceNotFoundException("Application does not exist");
         }
         Application application = applicationOptional.get();
         //copy to response
@@ -112,7 +112,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         //we want appliId to update and request what we want to update..so we create new dto
         Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
         if(applicationOptional.isEmpty()){
-            throw new RuntimeException("Application not found");
+            throw new ResourceNotFoundException("Application not found");
         }
         Application application = applicationOptional.get();
         //null check
@@ -138,7 +138,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         //get job by using jobId..we wan to return type list
         Optional<Job> jobOptional = jobRepository.findById(jobId);
         if(jobOptional.isEmpty()){
-            throw new RuntimeException("Jobs not found");
+            throw new ResourceNotFoundException("Jobs not found");
         }
         Job job = jobOptional.get();
         //we get application from job

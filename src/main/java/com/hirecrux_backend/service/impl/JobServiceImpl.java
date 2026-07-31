@@ -5,24 +5,20 @@ import com.hirecrux_backend.dto.response.CreateJobResponse;
 import com.hirecrux_backend.entity.Job;
 import com.hirecrux_backend.entity.User;
 import com.hirecrux_backend.enums.JobStatus;
+import com.hirecrux_backend.exception.DuplicateResourceException;
 import com.hirecrux_backend.repository.JobRepository;
 import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.service.JobService;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.hibernate.sql.ast.tree.expression.Over;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
+import com.hirecrux_backend.exception.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.hirecrux_backend.enums.JobStatus.CLOSED;
-import static com.hirecrux_backend.enums.JobStatus.OPEN;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +45,7 @@ public class JobServiceImpl implements JobService {
         //user may or may not be exist
         Optional<User> userOptional = userRepository.findByEmail(userDetails.getUsername());
         if(userOptional.isEmpty()){
-            throw new RuntimeException("Authenticated user not found");
+            throw new ResourceNotFoundException("Authenticated user not found");
         }
         User user = userOptional.get();
         job.setHr(user);
@@ -76,7 +72,7 @@ public class JobServiceImpl implements JobService {
     public List<CreateJobResponse> getAllJobs(){
         List<Job> jobs = jobRepository.findAll();
         if(jobs.isEmpty()){
-            throw new RuntimeException("Jobs does not exist");
+            throw new ResourceNotFoundException("Jobs does not exist");
         }
         List<CreateJobResponse> responses = new ArrayList<>();
         //for(datatype variable : collection)
@@ -99,7 +95,7 @@ public class JobServiceImpl implements JobService {
     public CreateJobResponse getJobById(Integer jobId){
         Optional<Job> jobOptional = jobRepository.findById(jobId);
         if(jobOptional.isEmpty()){
-            throw new RuntimeException("Job does not exist");
+            throw new ResourceNotFoundException("Job does not exist");
         }
         //1.get the particular job
         Job jobs = jobOptional.get();
@@ -122,7 +118,7 @@ public class JobServiceImpl implements JobService {
         Optional<Job> jobOptional = jobRepository.findById(jobId);
 
         if(jobOptional.isEmpty()){
-            throw new RuntimeException("Job does not exist");
+            throw new ResourceNotFoundException("Job does not exist");
         }
 
         Job jobs = jobOptional.get();
@@ -168,12 +164,12 @@ public class JobServiceImpl implements JobService {
         Optional<Job> jobOptional = jobRepository.findById(jobId);
 
         if(jobOptional.isEmpty()){
-            throw new RuntimeException("Job does not exist");
+            throw new ResourceNotFoundException("Job does not exist");
         }
 
         Job jobs = jobOptional.get();
         if(jobs.getStatus() == JobStatus.CLOSED){
-            throw new RuntimeException("jobs is already closed");
+            throw new DuplicateResourceException("jobs is already closed");
         }
         jobs.setStatus(JobStatus.CLOSED);
 

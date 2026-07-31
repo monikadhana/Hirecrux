@@ -6,12 +6,15 @@ import com.hirecrux_backend.dto.response.LoginResponseDto;
 import com.hirecrux_backend.dto.response.UserResponseDto;
 import com.hirecrux_backend.entity.User;
 import com.hirecrux_backend.enums.UserRole;
+import com.hirecrux_backend.exception.DuplicateResourceException;
+import com.hirecrux_backend.exception.InvalidCredentialsException;
 import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.security.JwtService;
 import com.hirecrux_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Optional;
 
@@ -25,7 +28,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(RegisterRequestDto request) {
         //checks email exist
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new DuplicateResourceException("Email already exists");
         }
         //creating the user
         User user = new User(); //User is a entity so we manually create construction.
@@ -64,12 +67,12 @@ public class UserServiceImpl implements UserService {
     public LoginResponseDto login(LoginRequestDto request){
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
         if(userOptional.isEmpty()){
-            throw new RuntimeException("Invalid Email or password");
+            throw new InvalidCredentialsException("Invalid Email or password");
         }
         User user = userOptional.get();
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-            throw new RuntimeException("Invalid Email or Password");
+            throw new InvalidCredentialsException("Invalid Email or Password");
         }
 
         String token = jwtService.generateToken(user.getEmail()); //JWT implementation

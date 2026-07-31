@@ -3,6 +3,7 @@ package com.hirecrux_backend.controller;
 import com.hirecrux_backend.dto.request.CreateJobRequest;
 import com.hirecrux_backend.dto.response.CreateJobResponse;
 import com.hirecrux_backend.service.JobService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class JobController {
 
     private final JobService jobService;
     @PostMapping("/create")
-    public CreateJobResponse createJob(@RequestBody CreateJobRequest request){
+    public CreateJobResponse createJob(@Valid @RequestBody CreateJobRequest request){
         return jobService.createJob(request);
     }
 
@@ -31,7 +32,7 @@ public class JobController {
     }
 
     @PutMapping("/update/{jobId}")
-    public CreateJobResponse updateJobById(@RequestBody CreateJobRequest request, @PathVariable Integer jobId){
+    public CreateJobResponse updateJobById(@Valid @RequestBody CreateJobRequest request, @PathVariable Integer jobId){
         return jobService.updateJobById(request, jobId);
     }
 

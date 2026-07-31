@@ -1,10 +1,10 @@
 package com.hirecrux_backend.service.impl;
 
 import com.hirecrux_backend.dto.request.NotificationRequest;
-import com.hirecrux_backend.dto.request.UpdateNotificationRequest;
 import com.hirecrux_backend.dto.response.NotificationResponse;
 import com.hirecrux_backend.entity.Notification;
 import com.hirecrux_backend.entity.User;
+import com.hirecrux_backend.exception.ResourceNotFoundException;
 import com.hirecrux_backend.repository.NotificationRepository;
 import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.service.NotificationService;
@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +28,7 @@ public class NotificationServiceImpl implements NotificationService {
         //get user by userid
         Optional<User> userOptional = userRepository.findById(request.getUserId());
         if(userOptional.isEmpty()){
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
         User user = userOptional.get();
 
@@ -63,7 +62,7 @@ public class NotificationServiceImpl implements NotificationService {
         //always get the user using email--findbyemail
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()){
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
         User user = userOptional.get();
         //find user notification
@@ -91,7 +90,7 @@ public class NotificationServiceImpl implements NotificationService {
         //get notification by notificationId
         Optional<Notification> notificationOptional = notificationRepository.findById(notificationId);
         if(notificationOptional.isEmpty()){
-            throw new RuntimeException("No notifications");
+            throw new ResourceNotFoundException("No notifications");
         }
         Notification notification = notificationOptional.get();
         //set the isread true

@@ -4,6 +4,8 @@ import com.hirecrux_backend.dto.request.CandidateProfileRequest;
 import com.hirecrux_backend.dto.response.CandidateProfileResponse;
 import com.hirecrux_backend.entity.CandidateProfile;
 import com.hirecrux_backend.entity.User;
+import com.hirecrux_backend.exception.DuplicateResourceException;
+import com.hirecrux_backend.exception.ResourceNotFoundException;
 import com.hirecrux_backend.repository.CandidateProfileRepository;
 import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.service.CandidateProfileService;
@@ -40,13 +42,13 @@ public class CandidateProfileServiceImpl implements CandidateProfileService {
         //always get the user using email--findbyemail
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()){
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
         User user = userOptional.get();
 
         //check the candidate exist by user
         if(candidateProfileRepository.existsByUser(user)){
-            throw new RuntimeException("candidate profile already exists");
+            throw new DuplicateResourceException("candidate profile already exists");
         }
         candidateProfile.setUser(user);
         CandidateProfile savedCandidateProfile = candidateProfileRepository.save(candidateProfile);//save repo
@@ -77,14 +79,14 @@ public class CandidateProfileServiceImpl implements CandidateProfileService {
         //always get the user using email--findbyemail
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()){
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
         User user = userOptional.get();
 
         //check the candidate exist by user
         Optional<CandidateProfile> candidateProfileOptional = candidateProfileRepository.findByUser(user);
         if(candidateProfileOptional.isEmpty()){
-            throw new RuntimeException("Candidate Profile not found");
+            throw new ResourceNotFoundException("Candidate Profile not found");
         }
         CandidateProfile candidateProfile = candidateProfileOptional.get();
 
@@ -113,14 +115,14 @@ public class CandidateProfileServiceImpl implements CandidateProfileService {
         //always get the user using email--findbyemail
         Optional<User> userOptional = userRepository.findByEmail(email);
         if(userOptional.isEmpty()){
-            throw new RuntimeException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
         User user = userOptional.get();
 
         //check the candidate exist by user
         Optional<CandidateProfile> candidateProfileOptional = candidateProfileRepository.findByUser(user);
         if(candidateProfileOptional.isEmpty()){
-            throw new RuntimeException("Candidate not found");
+            throw new ResourceNotFoundException("Candidate not found");
         }
         CandidateProfile candidateProfile = candidateProfileOptional.get(); //get candidate
         CandidateProfile updatedCandidateProfile = candidateProfile;  //save the already get to updatecandidate
@@ -163,7 +165,7 @@ public class CandidateProfileServiceImpl implements CandidateProfileService {
         Optional<CandidateProfile> candidateOptional = candidateProfileRepository.findById(candidateId);
 
         if(candidateOptional.isEmpty()){
-            throw new RuntimeException("Candidate not found");
+            throw new ResourceNotFoundException("Candidate not found");
         }
         CandidateProfile candidateProfile = candidateOptional.get();
         //get the user using candidateProfile...why? because we want to response with fullname and email that is in the user only
