@@ -16,6 +16,5 @@ public class CreateJobRequest {
     private String salaryRange;
     private JobStatus status;
     private String location;
-    @NotBlank
     private LocalDate deadline;
 }
