@@ -8,9 +8,7 @@ import java.time.LocalDate;
 
 @Data
 public class CreateJobRequest {
-    @NotBlank
     private String title;
-    @NotBlank
     private String description;
     private String experienceRequired;
     private String salaryRange;

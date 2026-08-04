@@ -3,6 +3,8 @@ package com.hirecrux_backend.entity;
 import com.hirecrux_backend.enums.ApplicationStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +29,7 @@ public class Application {
     private Integer resumeScore;
 
     @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(name = "application_status")
     private ApplicationStatus applicationStatus;
 
