@@ -44,4 +44,6 @@ public class User {
     @OneToMany(mappedBy = "hr")
     private List<Job> jobs;
 
+    @OneToMany(mappedBy = "interviewer")
+    private List<Interview> interviews;
 }
