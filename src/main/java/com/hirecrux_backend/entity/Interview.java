@@ -57,12 +57,12 @@ public class Interview {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
-    private InterviewStatus status;
+    private InterviewStatus interviewStatus;
 
     @Column(name = "result")
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
-    private InterviewResult result;
+    private InterviewResult interviewResult;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
