@@ -32,7 +32,7 @@ public class Interview {
     @ManyToOne
     private User interviewer;
 
-    @Column(name = "interview_At")
+    @Column(name = "interview_at")
     private LocalDateTime interviewAt;
 
     @Column(name = "interview_mode")
