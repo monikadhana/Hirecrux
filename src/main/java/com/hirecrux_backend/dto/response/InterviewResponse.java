@@ -4,11 +4,13 @@ import com.hirecrux_backend.enums.InterviewMode;
 import com.hirecrux_backend.enums.InterviewResult;
 import com.hirecrux_backend.enums.InterviewRound;
 import com.hirecrux_backend.enums.InterviewStatus;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class InterviewResponse {
     private Integer interviewId;
     private Integer applicationId;

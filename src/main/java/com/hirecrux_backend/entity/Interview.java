@@ -6,6 +6,7 @@ import com.hirecrux_backend.enums.InterviewRound;
 import com.hirecrux_backend.enums.InterviewStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
@@ -64,9 +65,11 @@ public class Interview {
     @JdbcType(PostgreSQLEnumJdbcType.class)
     private InterviewResult interviewResult;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Column(name = "created_at")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", insertable = false, updatable = false)
+    @Column(name = "updated_at")
+    @CreationTimestamp
     private LocalDateTime updatedAt;
 }

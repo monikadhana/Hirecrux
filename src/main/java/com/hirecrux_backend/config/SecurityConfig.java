@@ -48,6 +48,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/notification/create-notification")
                         .hasRole("HR")
 
+                        .requestMatchers(HttpMethod.POST, "/api/interview/schedule-interview")
+                        .hasRole("HR")
 
 
                         // Candidate APIs

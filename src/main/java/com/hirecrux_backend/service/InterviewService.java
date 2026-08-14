@@ -1,8 +1,8 @@
 package com.hirecrux_backend.service;
 
-import org.springframework.stereotype.Service;
+import com.hirecrux_backend.dto.request.InterviewRequest;
+import com.hirecrux_backend.dto.response.InterviewResponse;
 
-@Service
 public interface InterviewService {
-
+    InterviewResponse createInterview(InterviewRequest request);
 }

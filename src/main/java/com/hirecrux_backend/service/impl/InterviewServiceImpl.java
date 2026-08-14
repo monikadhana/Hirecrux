@@ -5,31 +5,30 @@ import com.hirecrux_backend.dto.response.InterviewResponse;
 import com.hirecrux_backend.entity.Application;
 import com.hirecrux_backend.entity.Interview;
 import com.hirecrux_backend.entity.User;
-import com.hirecrux_backend.enums.ApplicationStatus;
-import com.hirecrux_backend.enums.InterviewMode;
-import com.hirecrux_backend.enums.InterviewResult;
-import com.hirecrux_backend.enums.InterviewStatus;
+import com.hirecrux_backend.enums.*;
+import com.hirecrux_backend.exception.InvalidOperationException;
 import com.hirecrux_backend.exception.ResourceNotFoundException;
 import com.hirecrux_backend.repository.ApplicationRepository;
 import com.hirecrux_backend.repository.InterviewRepository;
 import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.service.InterviewService;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.apache.bcel.classfile.Module;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-
+@Service
 @RequiredArgsConstructor
 public class InterviewServiceImpl implements InterviewService {
     private final InterviewRepository interviewRepository;
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
 
+    @Override
     public InterviewResponse createInterview(InterviewRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -40,6 +39,10 @@ public class InterviewServiceImpl implements InterviewService {
             throw new ResourceNotFoundException("User not found");
         }
         User user = userOptional.get();
+
+        if(user.getRole() != UserRole.HR){
+            throw new AccessDeniedException("Only Hr user can schedule an interview");
+        }
 
         Optional<Application> applicationOptional = applicationRepository.findById(request.getApplicationId());
         if(applicationOptional.isEmpty()){
@@ -58,26 +61,26 @@ public class InterviewServiceImpl implements InterviewService {
         User interviewer = interviewerOptional.get();
 
         LocalDateTime currentTime = LocalDateTime.now();
-        if(request.getInterviewAt().isBefore(currentTime)){
-            throw new RuntimeException("Interview cannot schedule");
+        if(request.getInterviewAt() == null || request.getInterviewAt().isBefore(currentTime)){
+            throw new InvalidOperationException("Interview cannot schedule");
         }
 
         if(request.getInterviewMode() == InterviewMode.ONLINE){
-            if(request.getMeetingLink().isEmpty()){
-                throw new RuntimeException("Meeting link is required");
+            if(request.getMeetingLink() == null || request.getMeetingLink().isBlank()){
+                throw new InvalidOperationException("Meeting link is required");
             }
         }
 
         if(request.getInterviewMode() == InterviewMode.OFFLINE){
-            if(request.getLocation().isEmpty()){
-                throw new RuntimeException("Location is required");
+            if(request.getLocation() == null || request.getLocation().isBlank()){
+                throw new InvalidOperationException("Location is required");
             }
         }
 
         Interview interview = new Interview();
 
-        interview.setHr(user);
         interview.setApplication(application);
+        interview.setHr(user);
         interview.setInterviewer(interviewer);
         interview.setInterviewAt(request.getInterviewAt());
         interview.setInterviewMode(request.getInterviewMode());
@@ -90,20 +93,22 @@ public class InterviewServiceImpl implements InterviewService {
 
         Interview savedInterview = interviewRepository.save(interview);
 
-        InterviewResponse response = new InterviewResponse();
-
-        response.setInterviewId(savedInterview.getInterviewId());
-        response.setApplicationId(application.getApplicationId());
-        response.setHrId(user.getUserId());
-        response.setInterviewId(savedInterview.getInterviewId());
-        response.setInterviewAt(savedInterview.getInterviewAt());
-        response.setInterviewMode(savedInterview.getInterviewMode());
-        response.setInterviewRound(savedInterview.getInterviewRound());
-        response.setInterviewStatus(savedInterview.getInterviewStatus());
-        response.setInterviewResult(savedInterview.getInterviewResult());
-        response.setMeetingLink(savedInterview.getMeetingLink());
-        response.setLocation(savedInterview.getLocation());
-        response.setNotes(savedInterview.getNotes());
+        InterviewResponse response = InterviewResponse.builder()
+                .interviewId(savedInterview.getInterviewId())
+                .applicationId(savedInterview.getApplication().getApplicationId())
+                .hrId(savedInterview.getHr().getUserId())
+                .interviewerId(savedInterview.getInterviewer().getUserId())
+                .interviewAt(savedInterview.getInterviewAt())
+                .interviewMode(savedInterview.getInterviewMode())
+                .interviewRound(savedInterview.getInterviewRound())
+                .interviewStatus(savedInterview.getInterviewStatus())
+                .interviewResult(savedInterview.getInterviewResult())
+                .meetingLink(savedInterview.getMeetingLink())
+                .location(savedInterview.getLocation())
+                .notes(savedInterview.getNotes())
+                .createdAt(savedInterview.getCreatedAt())
+                .updatedAt(savedInterview.getUpdatedAt())
+                .build();
         return response;
     }
 }
