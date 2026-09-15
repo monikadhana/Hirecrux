@@ -20,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 @Service
 @RequiredArgsConstructor
@@ -110,5 +112,78 @@ public class InterviewServiceImpl implements InterviewService {
                 .updatedAt(savedInterview.getUpdatedAt())
                 .build();
         return response;
+    }
+
+    @Override
+    public InterviewResponse getInterviewById(Integer interviewId){
+        Optional<Interview> interviewOptional = interviewRepository.findById(interviewId);
+        if(interviewOptional.isEmpty()){
+            throw new ResourceNotFoundException("Interview not found");
+        }
+        Interview interview = interviewOptional.get();
+
+        InterviewResponse responseInterviewId = InterviewResponse.builder()
+                .interviewId(interview.getInterviewId())
+                .interviewerId(interview.getInterviewer().getUserId())
+                .interviewStatus(interview.getInterviewStatus())
+                .interviewRound(interview.getInterviewRound())
+                .interviewMode(interview.getInterviewMode())
+                .interviewResult(interview.getInterviewResult())
+                .interviewAt(interview.getInterviewAt())
+                .hrId(interview.getHr().getUserId())
+                .applicationId(interview.getApplication().getApplicationId())
+                .meetingLink(interview.getMeetingLink())
+                .location(interview.getLocation())
+                .notes(interview.getNotes())
+                .createdAt(interview.getCreatedAt())
+                .updatedAt(interview.getUpdatedAt())
+                .build();
+        return responseInterviewId;
+    }
+
+    @Override
+    public List<InterviewResponse> getMyInterviews(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if(userOptional.isEmpty()){
+            throw new ResourceNotFoundException("User Not found");
+        }
+        User users = userOptional.get();
+        List<Interview> interviews;
+        if(users.getRole() == UserRole.HR){
+            interviews = interviewRepository.findByHr(users);
+        }
+        else if(users.getRole() == UserRole.INTERVIEWER) {
+            interviews = interviewRepository.findByInterviewer(users);
+        }
+        else {
+            interviews = new ArrayList<>();
+        }
+
+        List<InterviewResponse> interviewResponseList = new ArrayList<>();
+        for(Interview interview: interviews){
+            InterviewResponse response = InterviewResponse.builder()
+                    .interviewId(interview.getInterviewId())
+                    .applicationId(interview.getApplication().getApplicationId())
+                    .hrId(interview.getHr().getUserId())
+                    .interviewerId(interview.getInterviewer().getUserId())
+                    .interviewAt(interview.getInterviewAt())
+                    .interviewMode(interview.getInterviewMode())
+                    .interviewRound(interview.getInterviewRound())
+                    .interviewStatus(interview.getInterviewStatus())
+                    .interviewResult(interview.getInterviewResult())
+                    .meetingLink(interview.getMeetingLink())
+                    .location(interview.getLocation())
+                    .notes(interview.getNotes())
+                    .createdAt(interview.getCreatedAt())
+                    .updatedAt(interview.getUpdatedAt())
+                    .build();
+
+            interviewResponseList.add(response);
+        }
+        return interviewResponseList;
     }
 }
