@@ -78,6 +78,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         ApplicationResponse response = new ApplicationResponse();
 
         response.setApplicationId(savedApplication.getApplicationId());
+        response.setCandidateId(savedApplication.getCandidate().getUserId());
+        response.setCandidateName(savedApplication.getCandidate().getFullName());
+        response.setCandidateEmail(application.getCandidate().getEmail());
         response.setJobId(job.getJobId());
         response.setAppliedAt(savedApplication.getAppliedAt());
         response.setJobTitle(job.getTitle());
@@ -99,6 +102,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         ApplicationResponse response = new ApplicationResponse();
 
         response.setApplicationId(application.getApplicationId());
+        response.setCandidateId(application.getCandidate().getUserId());
+        response.setCandidateName(application.getCandidate().getFullName());
+        response.setCandidateEmail(application.getCandidate().getEmail());
         response.setJobId(application.getJob().getJobId());
         response.setJobTitle(application.getJob().getTitle());
         response.setApplicationStatus(application.getApplicationStatus());
@@ -109,7 +115,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public ApplicationResponse updateApplicationStatus(Integer applicationId, UpdateApplicationRequest request){
-        //we want appliId to update and request what we want to update..so we create new dto
+        //we want appliId to update and request what we want to update. so we create new dto
         Optional<Application> applicationOptional = applicationRepository.findById(applicationId);
         if(applicationOptional.isEmpty()){
             throw new ResourceNotFoundException("Application not found");
@@ -125,6 +131,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         ApplicationResponse response = new ApplicationResponse();
 
         response.setApplicationId(updatedApplication.getApplicationId());
+        response.setCandidateId(updatedApplication.getCandidate().getUserId());
+        response.setCandidateName(updatedApplication.getCandidate().getFullName());
+        response.setCandidateEmail(updatedApplication.getCandidate().getEmail());
         response.setJobId(updatedApplication.getJob().getJobId());
         response.setJobTitle(updatedApplication.getJob().getTitle());
         response.setApplicationStatus(updatedApplication.getApplicationStatus());
@@ -135,7 +144,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public List<ApplicationResponse> getApplicationsByJob(Integer jobId){
-        //get job by using jobId..we wan to return type list
+        //get job by using jobId, we want to return type list
         Optional<Job> jobOptional = jobRepository.findById(jobId);
         if(jobOptional.isEmpty()){
             throw new ResourceNotFoundException("Jobs not found");
@@ -150,6 +159,9 @@ public class ApplicationServiceImpl implements ApplicationService {
             //copy to response
             ApplicationResponse response = new ApplicationResponse();
             response.setApplicationId(application.getApplicationId());
+            response.setCandidateId(application.getCandidate().getUserId());
+            response.setCandidateName(application.getCandidate().getFullName());
+            response.setCandidateEmail(application.getCandidate().getEmail());
             response.setJobId(application.getJob().getJobId());
             response.setJobTitle(application.getJob().getTitle());
             response.setApplicationStatus(application.getApplicationStatus());

@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 public class InterviewResponse {
     private Integer interviewId;
     private Integer applicationId;
+    private Integer candidateId;
+    private String candidateName;
+    private String candidateEmail;
     private Integer hrId;
     private Integer interviewerId;
     private LocalDateTime interviewAt;

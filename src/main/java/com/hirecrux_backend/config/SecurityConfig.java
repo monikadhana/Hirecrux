@@ -51,6 +51,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/interview/schedule-interview")
                         .hasRole("HR")
 
+                        .requestMatchers("/api/interview/completeInterview/**")
+                        .hasAnyRole("HR", "INTERVIEWER")
+
+                        .requestMatchers("/api/interview/cancelInterview/**")
+                        .hasRole("HR")
+
+                        .requestMatchers("/api/interview/schedule-interview")
+                        .hasRole("HR")
 
                         // Candidate APIs
                         .requestMatchers(HttpMethod.POST, "/api/application/createApplication")
@@ -62,6 +70,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/candidate-profile/create")
                         .hasRole("CANDIDATE")
 
+                        .requestMatchers("/api/interview/acceptInterview/**")
+                        .hasRole("CANDIDATE")
+
+                        .requestMatchers("/api/interview/rejectInterview/**")
+                        .hasRole("CANDIDATE")
 
                         // Shared APIs (HR + Candidate)
                         .requestMatchers(HttpMethod.GET, "/api/job/all")

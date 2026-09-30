@@ -5,6 +5,7 @@ import com.hirecrux_backend.dto.response.NotificationResponse;
 import com.hirecrux_backend.entity.Notification;
 import com.hirecrux_backend.entity.User;
 import com.hirecrux_backend.exception.ResourceNotFoundException;
+import com.hirecrux_backend.repository.InterviewRepository;
 import com.hirecrux_backend.repository.NotificationRepository;
 import com.hirecrux_backend.repository.UserRepository;
 import com.hirecrux_backend.service.NotificationService;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    private final InterviewRepository interviewRepository;
 
     @Override
     public NotificationResponse createNotification(NotificationRequest request){

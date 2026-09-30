@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 @Data
 public class ApplicationResponse {
     private Integer applicationId;
+    private Integer candidateId;
+    private String candidateName;
+    private String candidateEmail;
     private Integer jobId;
     private String jobTitle;
     private ApplicationStatus applicationStatus;

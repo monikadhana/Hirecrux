@@ -1,6 +1,8 @@
 package com.hirecrux_backend.controller;
 
+import com.hirecrux_backend.dto.request.CompleteInterviewRequest;
 import com.hirecrux_backend.dto.request.InterviewRequest;
+import com.hirecrux_backend.dto.response.InterviewDashboardResponse;
 import com.hirecrux_backend.dto.response.InterviewResponse;
 import com.hirecrux_backend.service.InterviewService;
 import jakarta.validation.Valid;
@@ -33,5 +35,30 @@ public class InterviewController {
     @GetMapping("/getMyInterviews")
     public List<InterviewResponse> getMyInterviews(){
         return interviewService.getMyInterviews();
+    }
+
+    @PutMapping("/acceptInterview/{interviewId}")
+    public InterviewResponse acceptInterview(@PathVariable Integer interviewId){
+        return interviewService.acceptInterview(interviewId);
+    }
+
+    @PutMapping("/rejectInterview/{interviewId}")
+    public InterviewResponse rejectInterview(@PathVariable Integer interviewId){
+        return interviewService.rejectInterview(interviewId);
+    }
+
+    @PutMapping("/completeInterview/{interviewId}")
+    public InterviewResponse completeInterview(@PathVariable Integer interviewId, @Valid @RequestBody CompleteInterviewRequest request){
+        return interviewService.completeInterview(interviewId, request);
+    }
+
+    @PutMapping("/cancelInterview/{interviewId}")
+    public InterviewResponse cancelInterview(@PathVariable Integer interviewId) {
+        return interviewService.cancelInterview(interviewId);
+    }
+
+    @GetMapping("/dashboard")
+    public InterviewDashboardResponse getDashboard(){
+        return interviewService.getDashboard();
     }
 }
