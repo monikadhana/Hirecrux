@@ -9,7 +9,6 @@ public class InterviewDashboardResponse {
     private long todayInterviews;
     private long upcomingInterviews;
     private long completedInterviews;
-
     private long scheduledCount;
     private long acceptedCount;
     private long rejectedCount;
