@@ -190,27 +190,37 @@ public class JobServiceImpl implements JobService {
         //I don't have any filters yet
         Specification<Job> specification = Specification.allOf();
 
-        if(title != null && !title.isBlank()) {
-            //allof instead of where, rule - (root,query,criteriaBuilder)
-            //root - root.get("title") -- job.title, query - no need, crb - LIKE,WHERE, eg -- WHERE title LIKE '%Java%'
+        if (title != null && !title.isBlank()) {
             specification = specification.and(
                     (root, query, criteriaBuilder) ->
-                            criteriaBuilder.like(root.get("title"), "%" + title.toLowerCase() + "%"));
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("title")),
+                                    "%" + title.trim().toLowerCase() + "%"
+                            )
+            );
         }
             //WHERE title LIKE '%Java%'
             //AND location LIKE '%Chennai%' -- initially allOf() and? added other
 
-            if(location != null && !location.isBlank() ){
-                specification = specification.and(
-                        (root, query, criteriaBuilder) ->
-                                criteriaBuilder.like(root.get("location"), "%"+ location.toLowerCase() +"%"));
-            }
+        if (location != null && !location.isBlank()) {
+            specification = specification.and(
+                    (root, query, criteriaBuilder) ->
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("location")),
+                                    "%" + location.trim().toLowerCase() + "%"
+                            )
+            );
+        }
 
-            if(experienceRequired != null && !experienceRequired.isBlank()){
-                specification = specification.and(
-                        (root, query, criteriaBuilder) ->
-                                criteriaBuilder.like(root.get("experienceRequired"),"%"+ experienceRequired.toLowerCase() +"%"));
-            }
+        if (experienceRequired != null && !experienceRequired.isBlank()) {
+            specification = specification.and(
+                    (root, query, criteriaBuilder) ->
+                            criteriaBuilder.like(
+                                    criteriaBuilder.lower(root.get("experienceRequired")),
+                                    "%" + experienceRequired.trim().toLowerCase() + "%"
+                            )
+            );
+        }
 
             specification = specification.and(
                     (root, query, criteriaBuilder) ->

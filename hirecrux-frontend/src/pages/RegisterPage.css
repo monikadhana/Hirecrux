@@ -1,0 +1,20 @@
+
+.register-page .auth-form-wrap {
+    max-width: 450px;
+}
+
+.register-page .auth-form {
+    gap: 7px;
+}
+
+.register-page .auth-form label {
+    margin-top: 4px;
+}
+
+.register-page .auth-form input {
+    min-height: 45px;
+}
+
+.register-page .login-button {
+    margin-top: 12px;
+}

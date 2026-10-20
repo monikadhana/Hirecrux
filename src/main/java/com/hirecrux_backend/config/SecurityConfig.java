@@ -10,6 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @Configuration
@@ -20,6 +23,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(cors ->
+                        cors.configurationSource(corsConfigurationSource())
+                )
                 .csrf(csrf -> csrf.disable())  //Cross-Site Request Forgery isn't needed for our JWT-based API.
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/register", "/api/users/login").permitAll()
@@ -33,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/job/close/*")
                         .hasRole("HR")
 
-                        .requestMatchers(HttpMethod.GET, "/api/candidate-profile/getCandidateProfile")
+                        .requestMatchers(HttpMethod.GET, "/api/candidate-profile/getCandidateProfile/**")
                         .hasRole("HR")
 
                         .requestMatchers(HttpMethod.GET, "/api/application/*")
@@ -110,4 +116,33 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(10);
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(
+                java.util.List.of("http://localhost:5173")
+        );
+
+        configuration.setAllowedMethods(
+                java.util.List.of(
+                        "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"
+                )
+        );
+
+        configuration.setAllowedHeaders(
+                java.util.List.of("Authorization", "Content-Type")
+        );
+
+        configuration.setAllowCredentials(false);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
+
 }

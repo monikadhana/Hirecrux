@@ -1,0 +1,117 @@
+
+/* ===== HireCrux authentication theme override ===== */
+
+.auth-page {
+    grid-template-columns: 1.03fr 0.97fr;
+    background: #f1edfa;
+    color: #302347;
+}
+
+.auth-page .auth-visual {
+    background:
+            radial-gradient(ellipse at 15% 20%, #e0d2ff 0%, transparent 48%),
+            radial-gradient(ellipse at 90% 85%, #cfdcff 0%, transparent 45%),
+            linear-gradient(145deg, #f1eaff, #e7eaff 58%, #f7f2ff);
+    color: #302347;
+}
+
+.auth-page .auth-visual::before {
+    background-image: radial-gradient(#a78bfa 0.8px, transparent 0.8px);
+    opacity: 0.18;
+}
+
+.auth-page .auth-visual h1 {
+    color: #302347;
+}
+
+.auth-page .auth-visual h1 span {
+    color: #7952d5;
+}
+
+.auth-page .auth-visual-content > p {
+    color: #655a7e;
+}
+
+.auth-page .visual-footer {
+    color: #75698c;
+}
+
+.auth-page .orbit {
+    border-color: rgba(121, 82, 213, 0.24);
+}
+
+.auth-page .orbit-chip {
+    border-color: #d8ccef;
+    color: #604b86;
+    background: rgba(255, 255, 255, 0.65);
+}
+
+.auth-page .auth-form-panel {
+    background:
+            radial-gradient(ellipse at 85% 15%, #e4d9fa 0%, transparent 45%),
+            #f1edfa;
+}
+
+.auth-page .auth-form-wrap {
+    max-width: 450px;
+    padding: clamp(26px, 3vw, 40px);
+    border: 1px solid #ded3f0;
+    border-radius: 24px;
+    background: #e8e1f4;
+    box-shadow: 0 22px 60px rgba(65, 43, 105, 0.12);
+}
+
+.auth-page .auth-form-wrap h2 {
+    color: #302347;
+}
+
+.auth-page .auth-form-wrap .muted {
+    color: #716481;
+}
+
+.auth-page .auth-form label {
+    color: #493b5e;
+}
+
+.auth-page .auth-form input {
+    border-color: #d2c5e5;
+    color: #302347;
+    background: #f8f5fd;
+}
+
+.auth-page .auth-form input::placeholder {
+    color: #9588a8;
+}
+
+.auth-page .auth-form input:focus {
+    border-color: #8963df;
+    box-shadow: 0 0 0 4px rgba(137, 99, 223, 0.14);
+}
+
+.auth-page .auth-switch {
+    color: #716481;
+}
+
+.auth-page .auth-switch a {
+    color: #7045c6;
+}
+
+.auth-page .auth-note {
+    color: #75698c;
+}
+
+.auth-page .brand {
+    color: #302347;
+}
+
+.auth-page .auth-visual .brand {
+    color: #302347;
+}
+
+.auth-page .auth-visual .brand-mark {
+    color: #fff;
+}
+
+.auth-page .mobile-brand {
+    color: #302347;
+}

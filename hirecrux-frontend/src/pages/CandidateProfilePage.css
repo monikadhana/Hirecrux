@@ -1,0 +1,351 @@
+
+.candidate-profile-page {
+    --cp-bg: #171522;
+    --cp-card: #211d30;
+    --cp-border: #393149;
+    --cp-text: #f1edf9;
+    --cp-muted: #aaa1bd;
+    --cp-purple: #b39aff;
+
+    min-height: 100%;
+    padding: 30px;
+    color: var(--cp-text);
+    background:
+            radial-gradient(ellipse at 85% 0%, rgba(115, 84, 177, 0.09), transparent 34%),
+            var(--cp-bg);
+}
+
+.candidate-profile-page *,
+.candidate-profile-page *::before,
+.candidate-profile-page *::after {
+    box-sizing: border-box;
+}
+
+.candidate-profile-page button,
+.candidate-profile-page input {
+    font: inherit;
+}
+
+.cp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.cp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--cp-purple);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+}
+
+.cp-header h1 {
+    margin: 11px 0 8px;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    letter-spacing: -0.045em;
+}
+
+.cp-header p,
+.cp-section-heading p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--cp-muted);
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.cp-identity-card,
+.cp-form-card {
+    border: 1px solid var(--cp-border);
+    border-radius: 17px;
+    background: var(--cp-card);
+}
+
+.cp-identity-card {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.cp-avatar {
+    display: grid;
+    flex-shrink: 0;
+    width: 66px;
+    height: 66px;
+    place-items: center;
+    border: 1px solid #51416a;
+    border-radius: 19px;
+    color: #c8b6ff;
+    background: #362b49;
+}
+
+.cp-identity-details {
+    min-width: 0;
+}
+
+.cp-identity-details h2 {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+}
+
+.cp-identity-details p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    color: var(--cp-muted);
+    font-size: 0.83rem;
+    overflow-wrap: anywhere;
+}
+
+.cp-profile-status {
+    display: inline-block;
+    padding: 5px 9px;
+    border: 1px solid #63513a;
+    border-radius: 20px;
+    color: #f0ce96;
+    background: #352b25;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.cp-profile-status.cp-complete {
+    border-color: #315747;
+    color: #98dfba;
+    background: #23382f;
+}
+
+.cp-form-card {
+    padding: 25px;
+}
+
+.cp-section-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 24px;
+    color: var(--cp-purple);
+}
+
+.cp-section-heading h2 {
+    margin: 0 0 7px;
+    color: var(--cp-text);
+    font-size: 1.12rem;
+}
+
+.cp-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.cp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+    color: #d5cce3;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.cp-full-width {
+    grid-column: 1 / -1;
+}
+
+.cp-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 46px;
+    padding: 0 12px;
+    border: 1px solid #40384f;
+    border-radius: 10px;
+    color: #a99abd;
+    background: #191623;
+}
+
+.cp-input-wrap:focus-within {
+    border-color: #8969d9;
+    box-shadow: 0 0 0 3px rgba(137, 105, 217, 0.13);
+}
+
+.cp-input-wrap > svg {
+    flex-shrink: 0;
+}
+
+.cp-input-wrap input,
+.cp-field > input {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 11px 12px;
+    border: 1px solid #40384f;
+    border-radius: 10px;
+    outline: none;
+    color: var(--cp-text);
+    background: #191623;
+    font-size: 0.84rem;
+    font-weight: 400;
+}
+
+.cp-input-wrap input {
+    padding: 10px 0;
+    border: 0;
+    background: transparent;
+}
+
+.cp-input-wrap input:focus,
+.cp-field > input:focus {
+    outline: none;
+}
+
+.cp-input-wrap input::placeholder,
+.cp-field > input::placeholder {
+    color: #81768f;
+}
+
+.cp-input-wrap input:disabled,
+.cp-field > input:disabled {
+    opacity: 0.85;
+    cursor: default;
+}
+
+.cp-input-wrap a {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--cp-purple);
+}
+
+.cp-primary-button,
+.cp-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 15px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    font-size: 0.83rem;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.cp-primary-button {
+    color: white;
+    background: linear-gradient(115deg, #9c7af0, #7856d0);
+}
+
+.cp-primary-button:hover:not(:disabled) {
+    background: linear-gradient(115deg, #ad93f5, #8968df);
+}
+
+.cp-secondary-button {
+    border-color: var(--cp-border);
+    color: var(--cp-text);
+    background: #282338;
+}
+
+.cp-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--cp-border);
+}
+
+.candidate-profile-page button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.cp-message,
+.cp-info-message {
+    padding: 13px 15px;
+    margin-bottom: 18px;
+    border: 1px solid;
+    border-radius: 11px;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.cp-error {
+    border-color: #70404e;
+    color: #ffc5d0;
+    background: #32212b;
+}
+
+.cp-success {
+    border-color: #315747;
+    color: #a2e7c3;
+    background: #22352e;
+}
+
+.cp-info-message {
+    border-color: #51416a;
+    color: #d5c7f5;
+    background: #292239;
+}
+
+.cp-state {
+    display: flex;
+    min-height: 250px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--cp-muted);
+}
+
+.cp-spin {
+    color: var(--cp-purple);
+    animation: cp-spin 1s linear infinite;
+}
+
+@keyframes cp-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 720px) {
+    .candidate-profile-page {
+        padding: 18px;
+    }
+
+    .cp-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .cp-form-card {
+        padding: 18px;
+    }
+
+    .cp-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cp-full-width {
+        grid-column: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cp-spin {
+        animation: none;
+    }
+}
