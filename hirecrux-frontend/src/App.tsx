@@ -9,6 +9,10 @@ import RegisterPage from "./pages/RegisterPage";
 import JobsPage from "./pages/JobsPage";
 import ApiErrorPopup from "./components/ApiErrorPopup";
 import CandidateProfilePage from "./pages/CandidateProfilePage";
+import ApplicationsPage from "./pages/ApplicationsPage";
+import NotificationsPage from "./pages/NotificationsPage";
+import InterviewsPage from "./pages/InterviewsPage";
+import InterviewDashboardPage from "./pages/InterviewDashboardPage";
 
 export default function App() {
   return (
@@ -22,9 +26,13 @@ export default function App() {
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/jobs" element={<JobsPage />} />
-              <Route path="/applications" element={<ModulePlaceholder />} />
-              <Route path="/assessments" element={<ModulePlaceholder />} />
-              <Route path="/profile" element={<CandidateProfilePage />} />              <Route path="/notifications" element={<ModulePlaceholder />} />
+                <Route path="/applications" element={<ApplicationsPage />}/>
+                <Route path="/assessments" element={<ModulePlaceholder />} />
+                <Route path="/profile" element={<CandidateProfilePage />} />
+                <Route path="/notifications" element={<NotificationsPage />}/>
+                <Route path="/interviews" element={<InterviewsPage />} />
+                <Route path="/interview-dashboard" element={<InterviewDashboardPage />}/>
+
             </Route>
           </Route>
 

@@ -11,5 +11,6 @@ ApplicationResponse createApplication(ApplicationRequest request);
 ApplicationResponse getApplicationById(Integer applicationId);
 ApplicationResponse updateApplicationStatus(Integer applicationId, UpdateApplicationRequest request);
 List<ApplicationResponse> getApplicationsByJob(Integer jobId);
-
+List<ApplicationResponse> getMyApplications();
+    List<ApplicationResponse> getAllApplications();
 }

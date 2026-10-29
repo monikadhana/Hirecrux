@@ -171,4 +171,70 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
         return responses;
     }
+
+    @Override
+    public List<ApplicationResponse> getMyApplications() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        UserDetails userDetails =
+                (UserDetails) authentication.getPrincipal();
+
+        String email = userDetails.getUsername();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
+
+        List<Application> applications =
+                applicationRepository.findByCandidate(user);
+
+        List<ApplicationResponse> responses = new ArrayList<>();
+
+        for (Application application : applications) {
+            ApplicationResponse response = new ApplicationResponse();
+
+            response.setApplicationId(application.getApplicationId());
+            response.setCandidateId(application.getCandidate().getUserId());
+            response.setCandidateName(application.getCandidate().getFullName());
+            response.setCandidateEmail(application.getCandidate().getEmail());
+            response.setJobId(application.getJob().getJobId());
+            response.setJobTitle(application.getJob().getTitle());
+            response.setApplicationStatus(application.getApplicationStatus());
+            response.setResumeScore(application.getResumeScore());
+            response.setAppliedAt(application.getAppliedAt());
+
+            responses.add(response);
+        }
+
+        return responses;
+    }
+
+    @Override
+    public List<ApplicationResponse> getAllApplications() {
+        List<Application> applications = applicationRepository.findAll();
+
+        List<ApplicationResponse> responses = new ArrayList<>();
+
+        for (Application application : applications) {
+            ApplicationResponse response = new ApplicationResponse();
+
+            response.setApplicationId(application.getApplicationId());
+            response.setCandidateId(application.getCandidate().getUserId());
+            response.setCandidateName(application.getCandidate().getFullName());
+            response.setCandidateEmail(application.getCandidate().getEmail());
+            response.setJobId(application.getJob().getJobId());
+            response.setJobTitle(application.getJob().getTitle());
+            response.setApplicationStatus(application.getApplicationStatus());
+            response.setResumeScore(application.getResumeScore());
+            response.setAppliedAt(application.getAppliedAt());
+
+            responses.add(response);
+        }
+
+        return responses;
+    }
+
+
+
 }

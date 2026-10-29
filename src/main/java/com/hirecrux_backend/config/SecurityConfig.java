@@ -42,14 +42,17 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/candidate-profile/getCandidateProfile/**")
                         .hasRole("HR")
 
-                        .requestMatchers(HttpMethod.GET, "/api/application/*")
+                        .requestMatchers(HttpMethod.GET, "/api/application/all")
+                        .hasRole("HR")
+
+                        .requestMatchers(HttpMethod.GET, "/api/application/job/*")
                         .hasRole("HR")
 
                         .requestMatchers(HttpMethod.PUT, "/api/application/update/*")
                         .hasRole("HR")
 
-                        .requestMatchers(HttpMethod.GET, "/api/application/job/*")
-                        .hasRole("HR")
+                        .requestMatchers(HttpMethod.GET, "/api/application/*")
+                        .authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/notification/create-notification")
                         .hasRole("HR")
@@ -68,6 +71,9 @@ public class SecurityConfig {
 
                         // Candidate APIs
                         .requestMatchers(HttpMethod.POST, "/api/application/createApplication")
+                        .hasRole("CANDIDATE")
+
+                        .requestMatchers(HttpMethod.GET, "/api/application/myApplications")
                         .hasRole("CANDIDATE")
 
                         .requestMatchers(HttpMethod.PUT, "/api/candidate-profile/updateProfile")

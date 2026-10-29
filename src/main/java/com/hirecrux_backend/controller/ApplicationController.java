@@ -37,4 +37,14 @@ public class ApplicationController {
     public List<ApplicationResponse> getApplicationsByJob(@PathVariable Integer jobId){
         return applicationService.getApplicationsByJob(jobId);
     }
+
+    @GetMapping("/myApplications")
+    public List<ApplicationResponse> getMyApplications() {
+        return applicationService.getMyApplications();
+    }
+
+    @GetMapping("/all")
+    public List<ApplicationResponse> getAllApplications() {
+        return applicationService.getAllApplications();
+    }
 }

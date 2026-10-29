@@ -62,6 +62,7 @@ export const candidateApi = {
 };
 
 // Applications
+// Applications
 export const applicationApi = {
     create: (data: { jobId: number }) =>
         api.post("/api/application/createApplication", data),
@@ -74,7 +75,55 @@ export const applicationApi = {
 
     getByJob: (jobId: number) =>
         api.get(`/api/application/job/${jobId}`),
+
+    getMyApplications: () =>
+        api.get("/api/application/myApplications"),
+
+    getAll: () =>
+        api.get("/api/application/all"),
 };
+
+
+export const interviewApi = {
+    schedule: (data: {
+        applicationId: number;
+        interviewerId: number;
+        interviewAt: string;
+        interviewMode: "ONLINE" | "OFFLINE" | "PHONE";
+        interviewRound: "HR" | "TECHNICAL" | "MANAGER" | "FINAL";
+        meetingLink?: string;
+        location?: string;
+        notes?: string;
+    }) => api.post("/api/interview/schedule-interview", data),
+
+    getById: (interviewId: number) =>
+        api.get(`/api/interview/${interviewId}`),
+
+    getMine: () =>
+        api.get("/api/interview/getMyInterviews"),
+
+    accept: (interviewId: number) =>
+        api.put(`/api/interview/acceptInterview/${interviewId}`),
+
+    reject: (interviewId: number) =>
+        api.put(`/api/interview/rejectInterview/${interviewId}`),
+
+    complete: (
+        interviewId: number,
+        data: { interviewResult: "PASSED" | "FAILED" | "ON_HOLD" }
+    ) =>
+        api.put(
+            `/api/interview/completeInterview/${interviewId}`,
+            data
+        ),
+
+    cancel: (interviewId: number) =>
+        api.put(`/api/interview/cancelInterview/${interviewId}`),
+
+    getDashboard: () =>
+        api.get("/api/interview/dashboard"),
+};
+
 
 // Notifications
 export const notificationApi = {
@@ -87,7 +136,7 @@ export const notificationApi = {
         api.post("/api/notification/create-notification", data),
 };
 
-function getApiErrorMessage(error: unknown): {
+export function getApiErrorMessage(error: unknown): {
     message: string;
     status?: number;
 } {
